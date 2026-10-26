@@ -23,3 +23,7 @@ All names and trademarks remain the property of their respective owners.
 
 Raster PNG versions are generated locally from the sourced vectors using Sharp
 for reliable display. Original vector sources and applicable notices are kept.
+
+## Expanded catalogue (26 October 2026)
+
+32 additional locally rasterised Devicon product icons are listed with their exact source URLs in expanded-sources.json. The Devicon MIT licence is retained alongside these assets. React Native uses the React project symbol. Product trademarks remain owned by their respective owners; use is identification only and implies no affiliation. Entries without an appropriate sourced mark use a neutral application icon.

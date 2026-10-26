@@ -1,8 +1,9 @@
+import catalogue from '../lib/enquiry-options.json' with {type:'json'};
 // Shared by Next.js and the Sites Worker. Uses Web APIs, no provider SDK.
 const MAX_FILE = 3 * 1024 * 1024;
 const MAX_BODY = MAX_FILE + 64 * 1024;
 const windowMs = 10 * 60 * 1000;
-const categories = ['Information Technology','Mechanical Engineering','Civil Engineering','Finance & Accounting','Management','Statistics'];
+const categories = catalogue.categories;
 const assistance = ['Tutoring & concept guidance','Debugging & technical review','Modelling & simulation guidance','Data analysis & reporting','Professional project assistance','Editing & documentation feedback'];
 const plans = ['Focused guidance','Project support','Professional support'];
 const buckets = new Map();
@@ -24,11 +25,17 @@ function text(form, key, max) { const v = form.get(key); return typeof v === 'st
 
 export function validateEnquiry(form, today = new Date().toISOString().slice(0,10)) {
   const fields = {};
-  const limits = {name:120,email:200,category:80,service:100,software:200,deadline:10,requirements:8000,plan:80,website:200,requestId:36};
+  const limits = {name:120,email:200,category:80,service:100,software:200,deadline:10,requirements:8000,plan:80,website:200,requestId:36,specificService:100,context:80,referencingStyle:80,formatting:1000};
   const data = Object.fromEntries(Object.entries(limits).map(([key,max])=>[key,text(form,key,max)]));
+  for(const key of ['specificService','referencingStyle','formatting'])if(!form.has(key))data[key]='';
+  data.category=catalogue.aliases[data.category]||data.category;
   if (!data.name || /[\r\n\x00-\x1f]/.test(data.name)) fields.name='Enter a valid name (up to 120 characters).';
   if (!data.email || !emailPattern.test(data.email)) fields.email='Enter a valid email address.';
   if (!categories.includes(data.category)) fields.category='Choose a support category.';
+  if (!catalogue.contexts.includes(data.context)) fields.context='Choose your academic or professional context.';
+  if (data.specificService===null || data.specificService&&!catalogue.services.some(s=>s.slug===data.specificService&&s.category===data.category)) fields.specificService='Choose a service in the selected category.';
+  if (data.referencingStyle===null || data.referencingStyle&&!catalogue.referenceStyles.includes(data.referencingStyle)) fields.referencingStyle='Choose a referencing style or institutional guide.';
+  if (data.formatting===null || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(data.formatting)) fields.formatting='Use up to 1000 characters for formatting requirements.';
   if (!assistance.includes(data.service)) fields.service='Choose a type of assistance.';
   if (data.software === null || /[\r\n\x00-\x1f]/.test(data.software)) fields.software='Use up to 200 characters without line breaks.';
   if (!data.requirements || data.requirements.length < 20 || /\x00/.test(data.requirements)) fields.requirements='Describe your requirements in 20–8000 characters.';
@@ -105,7 +112,7 @@ export async function handleEnquiry(request, env = {}, deps = {}) {
       const scan=await send(env.ATTACHMENT_SCAN_URL,{method:'POST',headers:{Authorization:'Bearer '+env.ATTACHMENT_SCAN_API_KEY,'Content-Type':'application/octet-stream'},body:attachment.bytes,signal:AbortSignal.timeout(15000)});
       if(!scan.ok || (await scan.json()).clean!==true) return json({error:'The attachment could not pass security screening. Remove it or choose another file.'},422);
     }
-    const body=`GLOBAL STUDY SUPPORT ENQUIRY\n\nName: ${data.name}\nEmail: ${data.email}\nCategory: ${data.category}\nAssistance: ${data.service}\nSoftware: ${data.software || 'Not specified'}\nPlan: ${data.plan || 'Not selected'}\nDeadline: ${data.deadline || 'Flexible'}\n\nRequirements:\n${data.requirements}`;
+    const body=`GLOBAL STUDY SUPPORT ENQUIRY\n\nName: ${data.name}\nEmail: ${data.email}\nCategory: ${data.category}\nSpecific service: ${catalogue.services.find(s=>s.slug===data.specificService)?.title || 'Help me choose'}\nContext: ${data.context}\nReferencing style: ${data.referencingStyle || 'Not specified'}\nFormatting requirements: ${data.formatting || 'Not specified'}\nAssistance: ${data.service}\nSoftware: ${data.software || 'Not specified'}\nPlan: ${data.plan || 'Not selected'}\nDeadline: ${data.deadline || 'Flexible'}\n\nRequirements:\n${data.requirements}`;
     const fingerprint=await hash(body+(attachment?await hash(attachment.bytes):''));
     const response=await send('https://api.resend.com/emails',{method:'POST',headers:{Authorization:'Bearer '+env.RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':`gss-${data.requestId}-${fingerprint}`},body:JSON.stringify({from:env.ENQUIRY_FROM_EMAIL,to:[env.ENQUIRY_TO_EMAIL],reply_to:data.email,subject:'Global Study Support enquiry: '+data.category,text:body,...(attachment?{attachments:[{filename:attachment.name,content:base64(attachment.bytes),content_type:attachment.type}]}:{})}),signal:AbortSignal.timeout(15000)});
     const result=await response.json();

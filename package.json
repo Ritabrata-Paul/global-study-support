@@ -8,7 +8,11 @@
     "typecheck": "tsc --noEmit",
     "start": "next start",
     "test": "tsx --test tests/*.test.mjs tests/*.test.tsx",
-    "build:sites": "node scripts/build-sites.mjs"
+    "build:sites": "node scripts/build-sites.mjs",
+    "sync:catalog": "tsx scripts/sync-enquiry-options.ts",
+    "prebuild": "npm run sync:catalog",
+    "prebuild:sites": "npm run sync:catalog",
+    "pretest": "npm run sync:catalog"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

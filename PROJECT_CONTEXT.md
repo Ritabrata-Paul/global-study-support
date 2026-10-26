@@ -22,15 +22,17 @@ software and sample pages. The user requested Next.js, TypeScript and Tailwind
 CSS; a premium, international, light-first appearance; a fully supported optional
 dark theme; a searchable software directory; and a prominent samples portfolio.
 
-The four primary service disciplines are:
+The original four service disciplines (preserved) are:
 
 - Information Technology.
 - Mechanical Engineering.
 - Civil Engineering.
 - Finance & Accounting.
 
-Management and Statistics are additional software filter categories, not primary
-service disciplines in this version.
+The owner confirmed all eight categories and listed topics on 26 October 2026.
+Management & Business, Statistics & Data Analytics, Academic Writing & Research,
+and Professional Projects & Documentation are now main service disciplines.
+See EXPANSION_REPORT.md and the expansion handoff below for the current state.
 
 Explicit content and scope constraints:
 
@@ -59,10 +61,11 @@ integration is connected or that browser QA has been completed.
 Implemented:
 
 - Eight main pages with shared navigation and footer.
-- Four service detail pages with areas of support and relevant tools.
-- Twenty software detail pages and a searchable, filterable directory.
-- Four clearly labelled original demonstration entries in the sample portfolio.
-- PDF previews and downloads, reference notes, Python code and synthetic data.
+- Eight category pages and 45 topic-specific service pages with structured local data.
+- Eighty unique software detail pages with multi-category search and filtering.
+- Eleven preserved portfolio entries: four demonstrations and seven owner-supplied references.
+- Preview-only sample pages with existing watermarks, code illustrations and financial demo.
+  Original files remain private; older download descriptions later in this file are historical.
 - An interactive financial reporting example with period selection.
 - Light, Dark and System theme selection with locally saved preference.
 - Responsive CSS layouts and a collapsible mobile navigation.
@@ -522,3 +525,62 @@ Preview update publication completed on 26 October 2026:
 - This deployment record was appended locally after publication. No live browser interaction test or real email delivery was performed.
 
 26 October 2026 label refinement: removed the word Watermarked from sample headings, loading text, captions, descriptions, deliverable labels and accessible image labels at the owner's request. Document watermark images, PDF restrictions and preview-only behavior remain unchanged.
+Label refinement validation: all 19 tests passed; Sites production build and TypeScript passed; 51-page link/asset check and 25-route Worker smoke checks passed. Published successfully with owner-private access preserved. Commit c524b27387ae2c2ccad8e8effde3abe1d5a6e096, deployment appgdep_6adf22fcfbd08191aafea8044ed34b56. This result note was appended locally after publication.
+
+
+## Expansion handoff ? 26 October 2026
+
+Owner confirmation: all eight requested service categories and listed topics are
+supported. No independent certifications or vendor affiliations are claimed.
+
+- lib/service-catalog.ts defines eight-category additions and 45 topic-specific
+  offerings, their topics, preparation guidance, deliverables, FAQs and exact
+  related sample slugs. published=false excludes a candidate; an unpublished
+  parent category also excludes its offerings. unpublishedServiceCandidates is
+  reserved for future unconfirmed entries and is empty for this confirmed scope.
+- lib/data.ts retains the four original categories, original 20 software records
+  and all 11 samples. It combines expanded catalogues without duplicate slugs.
+- lib/software-catalog.ts adds 60 tools (80 total), primary source links and
+  explicit multiple categories. lib/search.ts supports categories and topics.
+- components/service-directory.tsx adds eight category cards, keyword search,
+  category buttons and reset/empty states. Existing header and theme reused.
+- app/services/[slug]/page.tsx renders 8 categories plus 45 useful subservices.
+  Existing service slugs remain. Related samples are links to existing entries.
+- Academic writing, research planning, methodology, referencing, formatting and
+  editing are services. lib/academic.ts and components/academic-support.tsx
+  explain nine citation styles and distinguish font choice, layout and citation
+  conventions. Original citation illustrations use Darwin's historical book;
+  they are educational examples, not invented portfolio projects.
+- Software detail routes retain the original 20 slugs and link to directly
+  relevant services and samples that explicitly use the named tool. Security
+  tools are described for authorised educational/defensive use.
+- 32 additional Devicon icons (52 sourced marks total) are locally rasterised.
+  All others use a neutral AppWindow icon. React Native uses the React symbol.
+  Sources/licence retained in public/software-logos; no AI images generated.
+- components/enquiry.tsx adds category-aware specific services, academic/research/
+  professional context, optional reference style and formatting requirements.
+  Service and software CTAs prefill the existing form. Changing category clears
+  a stale service selection. Academic fields appear for writing or research work.
+- scripts/sync-enquiry-options.ts generates lib/enquiry-options.json from TS
+  catalogues for server validation. Run npm run sync:catalog after content edits.
+  npm prebuild/prebuild:sites/pretest run it automatically. Never hand-edit JSON.
+- server/enquiries.mjs validates category/service compatibility, context and
+  bounded academic fields and includes them in the Resend email body. Existing
+  receipt-based success, origin checks, Turnstile, honeypot, rate limit and scanned
+  attachments are preserved. No real email was sent by the implementation.
+- The standalone Sites Worker now packs repeated HTML/RSC text as a compressed
+  fragment dictionary, lazily reconstructs exact bytes and negotiates gzip.
+  Binary assets, especially portfolio previews, are unchanged. The original
+  separately compressed page copies exceeded the hosting budget; dictionary
+  packing fits the existing 9.5 MiB budget without lowering image quality.
+- No blog, admin, authentication, payments or new application dependency added.
+
+Portfolio preservation: no changes to app/samples/[slug]/page.tsx,
+components/sample-preview.tsx, lib/owner-samples.ts, lib/preview-manifest.json,
+sample images or private source files. Existing shared directory controls/cards
+are reused. The previous preview-only/no-public-download requirements remain.
+
+Validation and publication are recorded in EXPANSION_REPORT.md. No connected
+browser was available (empty browser/app inventory); DOM tests and static checks
+cannot establish real-device layout, absence of every console warning or full
+WCAG conformance. Email/Turnstile and optional scanner credentials remain needed.

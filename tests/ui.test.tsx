@@ -16,6 +16,8 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  const {renderToString}=await import('react-dom/server');
  const {PathnameContext,SearchParamsContext}=await import('next/dist/shared/lib/hooks-client-context.shared-runtime.js');
  const {default:ThemeToggle}=await import('../components/theme-toggle');
+ const {software}=await import('../lib/data');
+ const {default:ServiceDirectory}=await import('../components/service-directory');
  const {default:Directory}=await import('../components/directory');
  const {Header}=await import('../components/site');
  const {default:Enquiry}=await import('../components/enquiry');
@@ -43,10 +45,14 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  await click(menu);assert.equal(menu.getAttribute('aria-expanded'),'true');
  await act(async()=>document.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true})));assert.equal(menu.getAttribute('aria-expanded'),'false');assert.equal(document.activeElement,menu);
 
- await render(<Directory kind="software"/>);assert.equal(container.querySelectorAll('.tool-card').length,20);
+ await render(<Directory kind="software"/>);assert.equal(container.querySelectorAll('.tool-card').length,software.length);
  await setValue(container.querySelector('input[type="search"]')!,'pYtHoN');assert.equal(container.querySelectorAll('.tool-card').length,1);assert.match(container.querySelector('.tool-card')!.textContent!,/Python/);
  await click(button('Civil Engineering'));assert.ok(container.querySelector('.empty-state'));
- await click(button('Clear filters'));assert.equal(container.querySelectorAll('.tool-card').length,20);
+ await click(button('Clear filters'));assert.equal(container.querySelectorAll('.tool-card').length,software.length);
+ await render(<ServiceDirectory/>);assert.equal(container.querySelectorAll('.category-overview-card').length,8);
+ await setValue(container.querySelector('input[type="search"]')!,'CYBERSECURITY');assert.ok(container.querySelectorAll('.offering-card').length>0);
+ await click(button('Finance & Accounting'));assert.ok(container.querySelector('.empty-state'));
+ await click(button('Clear service filters'));assert.ok(container.querySelectorAll('.offering-card').length>30);
  await render(<Directory kind="samples"/>);assert.equal(container.querySelectorAll('.sample-card').length,11);
  await click(button('Management'));assert.equal(container.querySelectorAll('.sample-card').length,2);
  await render(<SamplePreview slug="example" title="Test report" pages={3}/>);
@@ -61,13 +67,16 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  globalThis.fetch=async(input,options)=>{requests.push(String(input));if(!options?.method)return Response.json({available,attachmentsAllowed:false,siteKey:available?'mock-site-key':''});if(delivery==='pending')return new Promise<Response>(resolve=>{finishDelivery=()=>resolve(Response.json({error:'Mock provider rejected this enquiry.'},{status:502}));});return delivery==='success'?Response.json({receipt:'mock-receipt',message:'The email service accepted your enquiry for delivery.'}):Response.json({error:'Mock provider rejected this enquiry.'},{status:502});};
  const enquiry=(key:string)=><SearchParamsContext.Provider value={new URLSearchParams('plan=Project+support&software=Python&category=Information+Technology')}><Enquiry key={key}/></SearchParamsContext.Provider>;
  await render(enquiry('unavailable'));assert.match(container.textContent!,/Online sending is currently unavailable/);assert.ok(button('Send Enquiry').disabled);assert.equal(container.querySelector<HTMLSelectElement>('#plan')!.value,'Project support');assert.equal(container.querySelector<HTMLInputElement>('#software')!.value,'Python');
+ await render(<SearchParamsContext.Provider value={new URLSearchParams('specificService=academic-referencing')}><Enquiry key="academic"/></SearchParamsContext.Provider>);
+ assert.equal(container.querySelector<HTMLSelectElement>('#category')!.value,'Academic Writing & Research');assert.equal(container.querySelector<HTMLSelectElement>('#specificService')!.value,'academic-referencing');assert.ok(container.querySelector('#referencingStyle'));assert.ok(container.querySelector('#formatting'));
+ await setValue(container.querySelector('#category')!,'Finance & Accounting');assert.equal(container.querySelector<HTMLSelectElement>('#specificService')!.value,'');assert.ok(!container.querySelector('#referencingStyle'));assert.match(container.querySelector('#specificService')!.textContent!,/Advanced Excel/);assert.ok(!container.querySelector('#specificService')!.textContent!.includes('Cybersecurity'));
  available=true;let solve:(value:string)=>void=()=>{};
  Object.assign(window,{turnstile:{render:(_el:HTMLElement,options:{callback:(v:string)=>void})=>{solve=options.callback;return 'mock-widget';},remove:()=>{},reset:()=>{}}});
  await render(enquiry('available'));
  const script=document.querySelector('script[src*="turnstile"]');assert.ok(script);
  await act(async()=>script.dispatchEvent(new dom.window.Event('load')));
  await act(async()=>solve('mock-token'));
- await setValue(container.querySelector('#name')!,'Visitor');await setValue(container.querySelector('#email')!,'visitor@example.test');await setValue(container.querySelector('#service')!,'Debugging & technical review');await setValue(container.querySelector('#requirements')!,'Please explain this small programming problem.');await click(container.querySelector('input[name="consent"]')!);
+ await setValue(container.querySelector('#name')!,'Visitor');await setValue(container.querySelector('#email')!,'visitor@example.test');await setValue(container.querySelector('#context')!,'Academic learning');await setValue(container.querySelector('#service')!,'Debugging & technical review');await setValue(container.querySelector('#requirements')!,'Please explain this small programming problem.');await click(container.querySelector('input[name="consent"]')!);
  delivery='pending';
  await act(async()=>container.querySelector('form')!.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true})));
  assert.equal(container.querySelector('form')!.getAttribute('aria-busy'),'true');assert.ok(button('Sending').disabled);assert.ok(!container.textContent!.includes('Reference:'));await act(async()=>finishDelivery());

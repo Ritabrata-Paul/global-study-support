@@ -1,4 +1,14 @@
 // Appended by build-sites.mjs after the shared handler, headers and asset map.
+let textBundlePromise;
+function decodeBase64(value){return Uint8Array.from(atob(value),c=>c.charCodeAt(0));}
+async function textAsset(key){
+ if(!textBundlePromise)textBundlePromise=(async()=>{
+  const stream=new Blob([decodeBase64(packedText)]).stream().pipeThrough(new DecompressionStream('gzip'));
+  return JSON.parse(await new Response(stream).text());
+ })();
+ const {fragments,refs}=await textBundlePromise;
+ return new TextEncoder().encode(refs[key].map(id=>fragments[id]).join(''));
+}
 export default {
  async fetch(request,env){
   const url=new URL(request.url);
@@ -13,16 +23,18 @@ export default {
   }
   if(url.pathname==='/'){key='/index.html';asset=assets[key];}
   const status=asset?200:404;
-  asset=asset||assets['/404.html'];
+  if(!asset){key='/404.html';asset=assets[key];}
   if(!asset)return new Response('Not found',{status:404,headers:securityHeaders});
   const headers=new Headers({...securityHeaders,'Content-Type':asset[1],'Cache-Control':key.startsWith('/_next/')?'public, max-age=31536000, immutable':'public, max-age=0, must-revalidate',ETag:'W/"'+asset[3]+'"'});
   if(asset[2])headers.set('Vary','Accept-Encoding');
   if(status===200&&request.headers.get('if-none-match')===headers.get('etag'))return new Response(null,{status:304,headers});
-  const bytes=Uint8Array.from(atob(asset[0]),c=>c.charCodeAt(0));
+  const bytes=asset[2]?await textAsset(key):decodeBase64(asset[0]);
   let body=bytes;
   if(asset[2]){
-   if(acceptsGzip(request.headers.get('accept-encoding')||''))headers.set('Content-Encoding','gzip');
-   else body=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+   if(acceptsGzip(request.headers.get('accept-encoding')||'')){
+    headers.set('Content-Encoding','gzip');
+    body=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+   }
   }
   headers.set('Content-Length',String(body.byteLength));
   return new Response(request.method==='HEAD'?null:body,{status,headers});

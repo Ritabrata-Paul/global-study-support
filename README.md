@@ -144,3 +144,16 @@ executed checks and remaining real-browser/live-provider verification.
 
 Read PROJECT_CONTEXT.md at the start of a new project chat and maintain it after
 meaningful changes.
+
+
+Expanded catalogue: see EXPANSION_REPORT.md for implementation and validation.
+Edit lib/service-catalog.ts for topic-specific services, lib/software-catalog.ts
+for software and lib/academic.ts for citation/formatting explanations. Existing
+records remain in lib/data.ts. Set published=false for unconfirmed service
+candidates. After edits run npm run sync:catalog (also automatic before build/test).
+The backend validation catalogue is generated; do not edit enquiry-options.json.
+For full exported SEO checks use:
+
+```powershell
+node node_modules/tsx/dist/cli.mjs scripts/check-expanded-export.mjs
+```

@@ -1,0 +1,13 @@
+'use client';
+import {useState} from 'react';
+import Link from 'next/link';
+import {ArrowUpRight,Search} from 'lucide-react';
+import {services} from '@/lib/data';
+import {publishedOfferings} from '@/lib/service-catalog';
+import {Icon} from './site';
+export default function ServiceDirectory(){
+ const [query,setQuery]=useState('');const[category,setCategory]=useState('All');
+ const terms=query.trim().toLocaleLowerCase('en').split(/\s+/).filter(Boolean);
+ const matches=publishedOfferings.filter(s=>(category==='All'||s.category===category)&&terms.every(t=>[s.title,s.description,s.category,...s.topics,...s.tools].join(' ').toLocaleLowerCase('en').includes(t)));
+ return <><div className="category-overview-grid">{services.map(s=><Link href={'/services/'+s.slug+'/'} className="category-overview-card" key={s.slug}><Icon name={s.icon}/><h2>{s.title}</h2><p>{s.description}</p><span className="text-link">Explore discipline <ArrowUpRight size={16}/></span></Link>)}</div><div className="section-heading" style={{marginTop:52}}><div><span className="eyebrow">FIND YOUR FOCUS</span><h2>Explore areas of assistance.</h2></div></div><div className="directory-toolbar"><div className="search-box"><Search size={18}/><input type="search" aria-label="Search services" placeholder="Search services, topics or technologies…" value={query} onChange={e=>setQuery(e.target.value)}/></div><span className="result-count" role="status">{matches.length} services to explore</span></div><div className="filters" role="group" aria-label="Filter services by category">{['All',...services.map(s=>s.title)].map(c=><button type="button" key={c} className={'filter '+(category===c?'selected':'')} aria-pressed={category===c} onClick={()=>setCategory(c)}>{c}</button>)}</div>{matches.length?<div className="directory-grid">{matches.map(s=><article className="offering-card" key={s.slug}><span className="eyebrow">{s.category}</span><h3><Link href={'/services/'+s.slug+'/'}>{s.title}</Link></h3><p>{s.description}</p><div className="tags">{s.tools.slice(0,4).map(t=><span key={t}>{t}</span>)}</div><Link className="text-link" href={'/services/'+s.slug+'/'}>Explore assistance <ArrowUpRight size={16}/></Link></article>)}</div>:<div className="empty-state"><h3>No services match your search.</h3><p>Try a broader topic or choose another category.</p><button type="button" className="button secondary" onClick={()=>{setQuery('');setCategory('All')}}>Clear service filters</button></div>}<p className="sample-disclaimer">Support is tailored to your brief. Versions, specialist availability, permitted assistance and deliverables are confirmed before work begins.</p></>;
+}

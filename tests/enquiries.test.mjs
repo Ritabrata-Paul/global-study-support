@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {deliveryConfiguration,handleEnquiry,inspectAttachment,validateEnquiry} from '../server/enquiries.mjs';
 
 const env={ENQUIRY_ALLOWED_ORIGIN:'https://example.test',RESEND_API_KEY:'test-only',ENQUIRY_FROM_EMAIL:'sender@example.test',ENQUIRY_TO_EMAIL:'inbox@example.test',TURNSTILE_SITE_KEY:'test-site-key',TURNSTILE_SECRET_KEY:'test-only'};
-function form(overrides={}){const f=new FormData();const fields={name:'Test Visitor',email:'visitor@example.test',category:'Information Technology',service:'Debugging & technical review',software:'Python',deadline:'',requirements:'Please explain this reproducible debugging example.',plan:'Project support',website:'',requestId:'6c9ea729-47d2-4779-9a09-e417ff0905bc',consent:'on','cf-turnstile-response':'test-token',...overrides};for(const[k,v]of Object.entries(fields))f.set(k,v);return f;}
+function form(overrides={}){const f=new FormData();const fields={name:'Test Visitor',email:'visitor@example.test',category:'Information Technology',context:'Academic learning',service:'Debugging & technical review',software:'Python',deadline:'',requirements:'Please explain this reproducible debugging example.',plan:'Project support',website:'',requestId:'6c9ea729-47d2-4779-9a09-e417ff0905bc',consent:'on','cf-turnstile-response':'test-token',...overrides};for(const[k,v]of Object.entries(fields))f.set(k,v);return f;}
 function request(f=form(),origin=env.ENQUIRY_ALLOWED_ORIGIN){return new Request('https://example.test/api/enquiries/',{method:'POST',headers:{origin},body:f});}
 function validCheck(){return Response.json({success:true,hostname:'example.test',action:'enquiry'});}
 let ip=0;function deps(fetcher){return {ip:'test-'+(++ip),fetch:fetcher};}
@@ -13,6 +13,19 @@ test('missing credentials cannot produce a success receipt',async()=>{const r=aw
 test('cross-origin request is rejected before external calls',async()=>{let calls=0;const r=await handleEnquiry(request(form(),'https://attacker.test'),env,deps(()=>{calls++;}));assert.equal(r.status,403);assert.equal(calls,0);});
 test('validates required fields, enums, consent, honeypot and header injection',()=>{for(const[k,v]of Object.entries({name:'Name\r\nInjected',email:'invalid',category:'Unknown',service:'Unknown',requirements:'short',plan:'Fake plan',deadline:'2026-02-31',consent:'',website:'bot'})){assert.ok(validateEnquiry(form({[k]:v}),'2026-01-01').fields[k],k);}assert.deepEqual(validateEnquiry(form(),'2026-01-01').fields,{});});
 test('past deadlines are rejected',()=>{assert.ok(validateEnquiry(form({deadline:'2025-12-31'}),'2026-01-01').fields.deadline);});
+test('specific services must match their category and academic fields are bounded',()=>{
+ assert.deepEqual(validateEnquiry(form({category:'Academic Writing & Research',specificService:'academic-referencing',context:'Research',referencingStyle:'APA 7th Edition',formatting:'Arial 12 pt, 1.5 spacing'})).fields,{});
+ assert.ok(validateEnquiry(form({specificService:'academic-referencing'})).fields.specificService);
+ assert.ok(validateEnquiry(form({context:'Unrecognised'})).fields.context);
+ assert.ok(validateEnquiry(form({referencingStyle:'Invented style'})).fields.referencingStyle);
+ assert.ok(validateEnquiry(form({formatting:'x'.repeat(1001)})).fields.formatting);
+ assert.equal(validateEnquiry(form({category:'Management',specificService:'project-management'})).data.category,'Management & Business');
+});
+test('new enquiry details are retained in provider email notification',async()=>{
+ let sent;let count=0;const r=await handleEnquiry(request(form({category:'Academic Writing & Research',specificService:'academic-referencing',context:'Research',referencingStyle:'Harvard',formatting:'Times New Roman, 12 pt'})),env,deps(async(_url,options)=>{
+  if(++count===1)return validCheck();sent=JSON.parse(options.body);return Response.json({id:'mock-academic-receipt'});
+ }));assert.equal(r.status,200);for(const value of ['Referencing & Citation Checking','Research','Harvard','Times New Roman, 12 pt'])assert.ok(sent.text.includes(value),value);
+});
 test('rejects unsupported content types and oversized bodies',async()=>{const r=await handleEnquiry(new Request('https://example.test/api/enquiries/',{method:'POST',headers:{origin:env.ENQUIRY_ALLOWED_ORIGIN,'content-type':'application/json'},body:'{}'}),env,deps(()=>{}));assert.equal(r.status,400);const large=new Request('https://example.test/api/enquiries/',{method:'POST',headers:{origin:env.ENQUIRY_ALLOWED_ORIGIN,'content-type':'multipart/form-data; boundary=x','content-length':'9999999'},body:'a'});assert.equal((await handleEnquiry(large,env,deps(()=>{}))).status,413);});
 test('failed or wrong-host security verification prevents delivery',async()=>{for(const result of [{success:false},{success:true,hostname:'attacker.test',action:'enquiry'},{success:true,hostname:'example.test',action:'other'}]){let calls=0;const r=await handleEnquiry(request(),env,deps(async()=>{calls++;return Response.json(result);}));assert.equal(r.status,422);assert.equal(calls,1);}});
 test('provider failure and ambiguous timeout cannot claim receipt',async()=>{for(const fail of [false,true]){let calls=0;const r=await handleEnquiry(request(),env,deps(async()=>{calls++;if(calls===1)return validCheck();if(fail)throw new Error('timeout');return Response.json({message:'Rejected'},{status:403});}));assert.equal(r.status,502);assert.equal((await r.json()).receipt,undefined);}});

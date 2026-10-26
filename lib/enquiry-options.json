@@ -1,0 +1,256 @@
+{
+  "categories": [
+    "Information Technology",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Finance & Accounting",
+    "Management & Business",
+    "Statistics & Data Analytics",
+    "Academic Writing & Research",
+    "Professional Projects & Documentation"
+  ],
+  "aliases": {
+    "Management": "Management & Business",
+    "Statistics": "Statistics & Data Analytics",
+    "Academic Writing": "Academic Writing & Research"
+  },
+  "services": [
+    {
+      "slug": "programming",
+      "title": "Programming & Debugging",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "web-development",
+      "title": "Web Development",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "mobile-development",
+      "title": "Mobile App Development",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "cybersecurity",
+      "title": "Cybersecurity & Digital Forensics",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "cloud-computing",
+      "title": "Cloud Computing",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "devops",
+      "title": "DevOps & CI/CD",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "networking",
+      "title": "Networking & Protocol Analysis",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "databases",
+      "title": "Databases & SQL",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "artificial-intelligence",
+      "title": "AI & Machine Learning",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "data-science-big-data",
+      "title": "Data Science & Big Data",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "software-engineering-testing",
+      "title": "Software Engineering, UML & Testing",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "systems-virtualisation",
+      "title": "Systems & Virtualisation",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "emerging-systems",
+      "title": "Blockchain, IoT & Embedded Systems",
+      "category": "Information Technology"
+    },
+    {
+      "slug": "mechanical-cad",
+      "title": "Mechanical Design & CAD Modelling",
+      "category": "Mechanical Engineering"
+    },
+    {
+      "slug": "engineering-simulation",
+      "title": "FEA, CFD & Mechanical Simulation",
+      "category": "Mechanical Engineering"
+    },
+    {
+      "slug": "thermal-fluid-engineering",
+      "title": "Thermodynamics, Heat Transfer & Fluid Mechanics",
+      "category": "Mechanical Engineering"
+    },
+    {
+      "slug": "manufacturing-automation",
+      "title": "Manufacturing, CNC & Industrial Automation",
+      "category": "Mechanical Engineering"
+    },
+    {
+      "slug": "matlab-simulink",
+      "title": "MATLAB & Simulink Modelling",
+      "category": "Mechanical Engineering"
+    },
+    {
+      "slug": "structural-analysis",
+      "title": "Structural Analysis & Design Guidance",
+      "category": "Civil Engineering"
+    },
+    {
+      "slug": "bim-civil-drafting",
+      "title": "Civil Drafting, Revit & BIM",
+      "category": "Civil Engineering"
+    },
+    {
+      "slug": "geotechnical-transport-surveying",
+      "title": "Geotechnical, Transportation & Surveying",
+      "category": "Civil Engineering"
+    },
+    {
+      "slug": "construction-planning",
+      "title": "Construction Planning & Quantity Surveying",
+      "category": "Civil Engineering"
+    },
+    {
+      "slug": "water-environment",
+      "title": "Hydrology & Environmental Engineering",
+      "category": "Civil Engineering"
+    },
+    {
+      "slug": "advanced-excel",
+      "title": "Advanced Excel & Spreadsheet Modelling",
+      "category": "Finance & Accounting"
+    },
+    {
+      "slug": "accounting-analysis",
+      "title": "Accounting & Financial Statement Analysis",
+      "category": "Finance & Accounting"
+    },
+    {
+      "slug": "financial-modelling",
+      "title": "Financial Modelling, Valuation & Risk",
+      "category": "Finance & Accounting"
+    },
+    {
+      "slug": "financial-dashboards",
+      "title": "Power BI Financial Dashboards",
+      "category": "Finance & Accounting"
+    },
+    {
+      "slug": "project-management",
+      "title": "Project Management & Scheduling",
+      "category": "Management & Business"
+    },
+    {
+      "slug": "strategy-business-analysis",
+      "title": "Strategy, Business Planning & Case Studies",
+      "category": "Management & Business"
+    },
+    {
+      "slug": "operations-supply-chain",
+      "title": "Operations & Supply Chain Management",
+      "category": "Management & Business"
+    },
+    {
+      "slug": "people-leadership",
+      "title": "HR, Leadership & Organisational Behaviour",
+      "category": "Management & Business"
+    },
+    {
+      "slug": "marketing-management",
+      "title": "Marketing Management & Digital Marketing",
+      "category": "Management & Business"
+    },
+    {
+      "slug": "statistical-analysis",
+      "title": "Statistical Analysis & Hypothesis Testing",
+      "category": "Statistics & Data Analytics"
+    },
+    {
+      "slug": "survey-research-data",
+      "title": "Survey Data & Research Interpretation",
+      "category": "Statistics & Data Analytics"
+    },
+    {
+      "slug": "data-visualisation",
+      "title": "Data Visualisation & Analytics",
+      "category": "Statistics & Data Analytics"
+    },
+    {
+      "slug": "academic-writing",
+      "title": "Academic Writing & Structure",
+      "category": "Academic Writing & Research"
+    },
+    {
+      "slug": "research-planning",
+      "title": "Literature Reviews, Proposals & Thesis Planning",
+      "category": "Academic Writing & Research"
+    },
+    {
+      "slug": "research-methodology",
+      "title": "Research Methodology & Ethics",
+      "category": "Academic Writing & Research"
+    },
+    {
+      "slug": "academic-referencing",
+      "title": "Referencing & Citation Checking",
+      "category": "Academic Writing & Research"
+    },
+    {
+      "slug": "document-formatting",
+      "title": "Academic Document Formatting",
+      "category": "Academic Writing & Research"
+    },
+    {
+      "slug": "academic-editing-presentations",
+      "title": "Academic Editing, Posters & Presentations",
+      "category": "Academic Writing & Research"
+    },
+    {
+      "slug": "technical-documentation",
+      "title": "Technical Documentation & Training",
+      "category": "Professional Projects & Documentation"
+    },
+    {
+      "slug": "software-prototyping",
+      "title": "Software Project Guidance & Prototyping",
+      "category": "Professional Projects & Documentation"
+    },
+    {
+      "slug": "professional-reports-proposals",
+      "title": "Professional Reports, Proposals & Project Documents",
+      "category": "Professional Projects & Documentation"
+    }
+  ],
+  "contexts": [
+    "Academic learning",
+    "Research",
+    "Professional"
+  ],
+  "referenceStyles": [
+    "Harvard",
+    "APA 7th Edition",
+    "MLA 9th Edition",
+    "Chicago",
+    "IEEE",
+    "Vancouver",
+    "OSCOLA",
+    "AMA",
+    "ACS",
+    "Other / institutional guide"
+  ]
+}

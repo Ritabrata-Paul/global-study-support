@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync,statSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
 const source=readFileSync('dist/server/index.js');
 // data import makes ESM explicit without changing the app's package module type.
 const {default:worker}=await import('data:text/javascript;base64,'+source.toString('base64'));
@@ -16,6 +17,20 @@ assert.equal((await worker.fetch(new Request(origin+'/',{method:'POST'}),{})).st
 const head=await worker.fetch(new Request(origin+'/',{method:'HEAD'}),{});assert.equal((await head.text()).length,0);
 const first=await worker.fetch(new Request(origin+'/'),{});assert.equal((await worker.fetch(new Request(origin+'/',{headers:{'if-none-match':first.headers.get('etag')}}),{})).status,304);
 const zipped=await worker.fetch(new Request(origin+'/',{headers:{'accept-encoding':'gzip'}}),{});assert.equal(zipped.headers.get('content-encoding'),'gzip');
+assert.deepEqual(gunzipSync(Buffer.from(await zipped.arrayBuffer())),readFileSync('out/index.html'));
+const noGzip=await worker.fetch(new Request(origin+'/',{headers:{'accept-encoding':'gzip;q=0'}}),{});assert.equal(noGzip.headers.get('content-encoding'),null);
+// Verify lossless fragment packing for every export, including all service,
+// software, portfolio and RSC assets. Do not mutate document previews.
+function files(dir){return readdirSync(dir).flatMap(n=>{const p=path.join(dir,n);return statSync(p).isDirectory()?files(p):[p];});}
+let roundTrips=0;
+for(const file of files('out')){
+ const key='/'+path.relative('out',file).replaceAll('\\','/');
+ if(key==='/logo.png'||/^\/images\/.*\.jpg$/.test(key))continue;
+ const r=await worker.fetch(new Request(origin+key),{});
+ assert.equal(r.status,200,key);
+ assert.deepEqual(Buffer.from(await r.arrayBuffer()),readFileSync(file),key);roundTrips++;
+}
 const cfg=await worker.fetch(new Request(origin+'/api/enquiries/'),{});assert.equal((await cfg.json()).available,false);
 const blocked=await worker.fetch(new Request(origin+'/api/enquiries/',{method:'POST',headers:{origin},body:new FormData()}),{});assert.ok(blocked.status>=400);
 console.log(`Worker smoke checks passed: ${count} pages/assets plus 404, redirects, methods, HEAD, ETag, gzip and fail-closed API.`);
+console.log(`Lossless Worker responses verified for all ${roundTrips} exported assets.`);
