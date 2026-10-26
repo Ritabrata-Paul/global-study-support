@@ -9,8 +9,8 @@ const origin='https://example.test';
 const routes=['/','/about/','/services/','/software/','/samples/','/how-it-works/','/pricing/','/contact/','/faq/','/privacy/','/terms/','/academic-integrity/'];
 let count=0;
 for(const route of routes){const r=await worker.fetch(new Request(origin+route),{});assert.equal(r.status,200,route);const html=await r.text();assert.match(html,/<main/);assert.ok(r.headers.get('content-security-policy'));count++;}
-for(const route of ['/software/python/','/software/power-bi/','/services/civil-engineering/','/samples/financial-dashboard/','/samples/python-data-analysis.pdf','/software-logos/python.svg','/fonts/jakarta-latin.woff2','/favicon.png','/sitemap.xml','/robots.txt']){const r=await worker.fetch(new Request(origin+route),{});assert.equal(r.status,200,route);assert.ok((await r.arrayBuffer()).byteLength);count++;}
-assert.equal((await worker.fetch(new Request(origin+'/missing-page/'),{})).status,404);
+for(const route of ['/software/python/','/software/power-bi/','/services/civil-engineering/','/samples/financial-dashboard/','/samples/revit-bim-coordination-report/','/samples/talent-management-report/','/previews/revit-bim-coordination-report/page-35.webp','/previews/python-data-analysis/page-1.webp','/software-logos/python.svg','/fonts/jakarta-latin.woff2','/favicon.png','/sitemap.xml','/robots.txt']){const r=await worker.fetch(new Request(origin+route),{});assert.equal(r.status,200,route);assert.ok((await r.arrayBuffer()).byteLength);count++;}
+for(const path of ['/missing-page/','/samples/python-data-analysis.pdf','/sample/Excel_sample.docx'])assert.equal((await worker.fetch(new Request(origin+path),{})).status,404);
 assert.equal((await worker.fetch(new Request(origin+'/services'),{})).status,308);
 assert.equal((await worker.fetch(new Request(origin+'/',{method:'POST'}),{})).status,405);
 const head=await worker.fetch(new Request(origin+'/',{method:'HEAD'}),{});assert.equal((await head.text()).length,0);

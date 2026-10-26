@@ -1,0 +1,68 @@
+{
+  "financial-accounting-report": {
+    "pages": 11,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "python-sales-analysis-report": {
+    "pages": 25,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "cultural-design-study": {
+    "pages": 8,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "digital-forensics-report": {
+    "pages": 23,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "revit-bim-coordination-report": {
+    "pages": 35,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "talent-management-report": {
+    "pages": 12,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "sme-innovation-report": {
+    "pages": 23,
+    "kind": "owner-supplied",
+    "width": 900,
+    "height": 1165
+  },
+  "python-data-analysis": {
+    "pages": 1,
+    "kind": "demonstration",
+    "width": 900,
+    "height": 1273
+  },
+  "cad-assembly-design": {
+    "pages": 1,
+    "kind": "demonstration",
+    "width": 900,
+    "height": 1273
+  },
+  "building-structural-model": {
+    "pages": 1,
+    "kind": "demonstration",
+    "width": 900,
+    "height": 1273
+  },
+  "financial-dashboard": {
+    "pages": 1,
+    "kind": "demonstration",
+    "width": 900,
+    "height": 1273
+  }
+}

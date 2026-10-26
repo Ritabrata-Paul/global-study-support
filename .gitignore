@@ -8,3 +8,5 @@ tmp/
 dist/
 # Owner-provided source documents require a separate privacy/permission review.
 /sample/
+/private/
+/output/

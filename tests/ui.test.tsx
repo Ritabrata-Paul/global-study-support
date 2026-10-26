@@ -19,6 +19,7 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  const {default:Directory}=await import('../components/directory');
  const {Header}=await import('../components/site');
  const {default:Enquiry}=await import('../components/enquiry');
+ const {default:SamplePreview}=await import('../components/sample-preview');
  const container=document.getElementById('root')!;
  let root=createRoot(container);
  const render=async(node:React.ReactNode)=>{await act(async()=>{root.render(node);});};
@@ -46,7 +47,14 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  await setValue(container.querySelector('input[type="search"]')!,'pYtHoN');assert.equal(container.querySelectorAll('.tool-card').length,1);assert.match(container.querySelector('.tool-card')!.textContent!,/Python/);
  await click(button('Civil Engineering'));assert.ok(container.querySelector('.empty-state'));
  await click(button('Clear filters'));assert.equal(container.querySelectorAll('.tool-card').length,20);
- await render(<Directory kind="samples"/>);assert.equal(container.querySelectorAll('.sample-card').length,4);
+ await render(<Directory kind="samples"/>);assert.equal(container.querySelectorAll('.sample-card').length,11);
+ await click(button('Management'));assert.equal(container.querySelectorAll('.sample-card').length,2);
+ await render(<SamplePreview slug="example" title="Test report" pages={3}/>);
+ assert.equal(container.querySelector<HTMLButtonElement>('[aria-label="Previous preview page"]')!.disabled,true);
+ await click(container.querySelector('[aria-label="Next preview page"]')!);assert.match(container.querySelector('img')!.getAttribute('src')!,/page-2.webp/);
+ await click(container.querySelector('[aria-label="Zoom in preview"]')!);assert.match(container.textContent!,/125%/);
+ assert.equal(container.querySelectorAll('a[download],iframe').length,0);
+ assert.equal(container.querySelector('img')!.draggable,false);
 
  let available=false;let delivery:'success'|'error'|'pending'='error';let finishDelivery:()=>void=()=>{};
  const requests:string[]=[];

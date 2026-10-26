@@ -76,8 +76,10 @@ This builds the same Next.js pages as a static frontend and bundles them with
 the shared Web-API enquiry handler into dist/server/index.js. The native Next
 API route is excluded only during that frontend export. Sitemap/robots are
 emitted by the Sites builder. Assets are embedded with gzip and caching metadata,
-without a runtime bundler dependency. The builder enforces an 8 MB gzip size
-budget; move assets to native bindings/CDN storage before significant growth.
+without a runtime bundler dependency. The builder enforces a 9.5 MB gzip size
+budget and rejects raw DOCX/PDF sample files in the export. It omits unused
+full-size source logo/JPEG assets from the hosted bundle. Move assets to native
+bindings/CDN storage before significant growth.
 Do not run native and Sites builds simultaneously: they share .next/.
 
 Use the Sites skill and source helper to package and publish, preserve the existing
@@ -96,10 +98,31 @@ Site ID and audience, and never put runtime credentials in the hosting manifest.
 - server/enquiries.mjs: validation, abuse checks, screening and delivery.
 - public/samples/: four original learning references and actual downloads.
 
-Sample downloads are rendered only for files found during page generation.
-The existing demonstrations are not verified client work. No native CAD/BIM/BI
-files or project screenshots have been supplied. Add only authorised material.
-The local sample/ Word documents are ignored and are not published.
+The portfolio is preview-only. Seven owner-supplied Word reports have been
+converted to watermarked image-only PDFs, alongside the four original reference
+demonstrations (11 PDFs / 141 pages). Local PDFs are in output/pdf/ and remain
+outside public/ and Git. The website serves watermarked WebP pages through a
+custom page/zoom viewer; no DOCX, raw PDF, code, CSV or sample download buttons
+are published. Original documents remain unchanged in ignored sample/.
+
+scripts/prepare-previews.py creates the watermarked PDFs and public page renders
+from local converted PDFs in tmp/word-pdf/. It requires PyMuPDF and Pillow.
+The current Word conversions were performed locally with a signed, extracted
+LibreOffice runtime after Word automation stalled. No external conversion service
+received the documents. Explicit student identifier fields and text emails are
+redacted in viewing copies; document metadata is replaced before publication.
+
+PDFs have no text layer and copying/printing permissions are disabled. The web
+viewer has no PDF toolbar or download action, no selectable report text, and
+prevents dragging/context-menu copying inside the preview. These controls do not
+prevent screenshots, OCR or determined extraction of displayed content. Do not
+promise absolute copy protection.
+
+New preview metadata: lib/owner-samples.ts and lib/preview-manifest.json.
+All 20 software entries now show sourced image assets; STAAD.Pro currently uses
+the Bentley vendor mark, identified as such in asset notices. Existing demo
+cards remain; owner-supplied reports are labelled separately and Management is
+available as a portfolio filter.
 
 Photography, fonts, logo and icon assets are hosted locally. Font licences are in
 public/fonts/; software logo notices are in public/software-logos/. Other software

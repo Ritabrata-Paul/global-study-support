@@ -6,7 +6,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 
 root=Path(__file__).resolve().parents[1]
-out=root/'public'/'samples'
+out=root/'private'/'reference-source'
 out.mkdir(parents=True,exist_ok=True)
 styles=getSampleStyleSheet()
 styles.add(ParagraphStyle(name='Brand',fontName='Helvetica-Bold',fontSize=10,textColor=colors.HexColor('#0d7f75'),spaceAfter=26))

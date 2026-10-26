@@ -1,5 +1,0 @@
-GLOBAL STUDY SUPPORT - CONCEPTUAL REFERENCE
-
-Read building-structural-model.pdf for the complete original study.
-No native CAD/BIM model is included.
-Not for manufacture, construction or safety decisions.

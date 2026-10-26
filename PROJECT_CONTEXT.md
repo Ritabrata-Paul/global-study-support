@@ -443,3 +443,71 @@ as completed merely because it is described here.
 New files to know: lib/details.ts, lib/config.ts, lib/search.ts, lib/sample-files.ts,
 components/photo.tsx, components/software-mark.tsx, server/, tests/,
 scripts/build-sites.mjs, scripts/check-worker.mjs, PRODUCTION_REPORT.md and .env.example.
+
+## Latest verified deployment
+
+The production-improvement update was deployed successfully on 26 October 2026.
+The native tool returned `succeeded` and the existing URL:
+https://global-study-support.patelprincem2000.chatgpt.site
+
+- Pushed runtime source: `494ea5aa06744bd2d3182d41b4d8c226b055b344`.
+- Version: `appgprj_6adeefd92d4c819182845181794da57a~appgver_774b19c64d7481918d3bf27daaf5edec`.
+- Deployment: `appgdep_6adf04c6f23881919ca97bdc7463ed74`.
+- Audience preserved as owner-private. Runtime environment revision was zero;
+  email/security credentials were not configured by this task.
+- Archive: `../global-study-support-production.tar.gz`.
+
+Both final builds, all 18 tests, the 44-page exported-link/asset check and the
+Worker smoke check passed inside the source-packaging workflow before publication.
+This local deployment record was written after publication; it does not change
+the runtime artifact from the commit above. No real email or public launch was
+performed. Browser inventory was empty; remaining verification is listed in
+PRODUCTION_REPORT.md.
+
+## Watermarked preview and software image update - 26 October 2026
+
+The owner explicitly authorised converting the Word sample folder and requested
+watermarks, no DOCX publication, no download buttons, and preview-only viewing.
+This supersedes earlier notes about downloadable portfolio files and holding the
+Word reports pending approval.
+
+- All 20 software entries use locally stored sourced PNG logo/product/vendor
+  images, with vector sources/notices retained. STAAD.Pro uses the Bentley vendor
+  mark (not a claimed STAAD-specific application icon).
+- Seven Word reports were converted locally; the existing four demos were also
+  watermarked. 11 image-only PDFs contain 141 pages in total.
+- PDFs are stored in ignored output/pdf/, with no text layer and PDF copy/print
+  permissions disabled. Original Word sources remain unchanged in ignored sample/.
+- Only watermarked page WebP files in public/previews/ are served. The custom
+  components/sample-preview.tsx viewer has page selection and zoom, no native PDF
+  toolbar/download link, no text layer and non-draggable page images.
+- Source DOCX, PDF, code and CSV files were removed from public/samples/ and kept
+  in private/reference-source/ where applicable. The source generator now writes
+  there, and the Sites builder rejects exposed raw sample documents.
+- Seven new owner-reference cards are separate from four original demonstrations;
+  descriptions do not claim verified client work. Management is filterable.
+- Explicit student identifier lines and text emails are redacted from viewing
+  copies, and PDF metadata is replaced. No claim of a forensic privacy audit or
+  rights verification for embedded third-party images is made.
+- Absolute copy protection is impossible for displayed content: screenshots,
+  OCR and determined asset extraction remain possible. Do not tell the owner
+  otherwise. These restrictions also limit screen-reader access to full report
+  text; page summaries and report descriptions remain available.
+- Conversion scripts: scripts/prepare-previews.py, plus local headless Word/LO
+  conversion to tmp/word-pdf/. The signed LibreOffice converter was extracted only
+  into the ignored temporary workspace after Word export stalled.
+- Current tests cover 11 samples, 20 image assets, preview navigation/zoom and
+  absence of public raw documents. Current validation/deployment results follow
+  when the task completes.
+
+Preview update validation: 19 tests passed; TypeScript passed; exported links and
+assets passed across 51 HTML pages. All 11 local PDFs were checked to contain no
+extractable text and to disable PDF copy/print permissions. Full-page first/last
+renders and contact sheets covering all 141 pages were visually inspected.
+The source sample folder changed externally during the task from the original
+seven DOCX files to seven *_watermark.pdf files. This task did not delete or
+replace those source files. Conversion used the earlier DOCX snapshot; originals
+were never published. The converted raw PDFs in ignored tmp/word-pdf/ allow
+regeneration without the Word files. The temporary converter/installer cleanup
+was rejected by automatic approval review (generic blocked-by-policy reason),
+so ignored tmp/tools/ remains local and is excluded from source/publication.

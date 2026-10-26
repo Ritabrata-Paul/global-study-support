@@ -1,3 +1,4 @@
+import {ownerSampleDetails} from './owner-samples';
 // Editable descriptions: scope is confirmed on enquiry, not a claim of certification.
 export const serviceDetails: Record<string, {overview:string;faqs:string[][]}> = {
  'information-technology': {overview:'Work through software problems with a clearer view of the underlying concepts. Sessions can cover code structure, debugging, database design and deployment workflows. Bring a reproducible example, your current approach and the specific behaviour you want to understand. Support is scoped to the technology and version involved.',faqs:[['What should I share for debugging?','Provide a minimal code example, expected and actual results, error messages and software versions. Remove secrets, passwords and private data.'],['Can you support graded programming work?','We can explain concepts, review your approach and guide debugging within your institution’s rules. You remain responsible for the code you submit.']]},
@@ -30,6 +31,7 @@ export const toolDetails: Record<string, [string,string[]]> = {
 };
 
 export const sampleDetails: Record<string, {objectives:string[];methodology:string[];outcomes:string[];downloads:{label:string;file:string}[];screenshots:{src:string;alt:string;caption:string}[]}> = {
+ ...ownerSampleDetails,
  'python-data-analysis': {
   objectives:['Validate a small synthetic sales dataset.','Compare regional revenue without overstating the result.'],
   methodology:['Read the CSV and check required fields, missing values and numeric revenue.','Aggregate revenue by region and export a sorted summary.','Plot regional totals and document the limits of six synthetic observations.'],

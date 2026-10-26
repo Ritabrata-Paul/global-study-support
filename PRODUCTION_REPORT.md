@@ -125,3 +125,38 @@ receipt-only success. External security/scanner/email responses are mocked.
 
 No admin dashboard, blog, login, registration, payment gateway or runtime SDK was
 added. Test-only dependencies: `tsx`, `jsdom`, `@types/jsdom`.
+
+## Preview-only samples update
+
+The owner subsequently requested real software images, conversion of all Word
+samples to watermarked PDFs, no published DOCX and no sample download controls.
+This supersedes the earlier download/permission-pending notes above.
+
+- 20 tools now have sourced raster logo/product/vendor images with notices.
+- Seven supplied reports were converted locally, together with four existing
+  demonstrations, into 11 image-only watermarked PDFs (141 pages).
+- Local PDFs are under ignored output/pdf/ with copying and printing permissions
+  disabled; no text/OCR layer was added. These files are not public URLs.
+- Website previews use rendered watermarked pages with pagination and zoom.
+  No PDF toolbar, PDF link, DOCX, source code or dataset downloads are exposed.
+- Source-file publication checks and UI tests protect this preview-only behavior.
+- 19 tests, TypeScript and the 51-page exported link/asset check passed.
+- PDF restrictions were programmatically checked; full-size page samples and
+  all-page contact sheets were visually reviewed.
+- Screenshots/OCR/determined image extraction remain possible. No absolute copy
+  protection is promised. Full report text is not screen-reader accessible.
+- The source folder changed externally to *_watermark.pdf files during the task;
+  no source DOCX was deleted by this implementation.
+- Automatic approval review blocked optional temporary-converter cleanup with
+  a generic policy rejection. Those files remain ignored in tmp/tools/.
+
+Key changed files: components/software-mark.tsx, components/sample-preview.tsx,
+app/samples/[slug]/page.tsx, components/site.tsx, components/directory.tsx,
+lib/owner-samples.ts, lib/preview-manifest.json, lib/data.ts, lib/details.ts,
+scripts/prepare-previews.py, scripts/create-samples.py, scripts/build-sites.mjs,
+scripts/check-worker.mjs, tests/, public/software-logos/, public/previews/,
+app/globals.css and the handoff documentation.
+
+The preview update Sites build passed (466 hosted assets, 9412 KB gzip Worker).
+Worker checks passed for 25 pages/assets and rejected direct source Word/PDF URLs.
+The final source-packaging workflow also validates the native build and tests.
