@@ -1,1 +1,30 @@
-{"name":"global-study-support","version":"1.0.0","private":true,"scripts":{"dev":"next dev --hostname 0.0.0.0","build":"next build","typecheck":"tsc --noEmit"},"dependencies":{"next":"16.4.3","react":"19.2.4","react-dom":"19.2.4","lucide-react":"^0.468.0"},"devDependencies":{"typescript":"^5.9.3","@types/node":"^22","@types/react":"^19","@types/react-dom":"^19","tailwindcss":"^4","@tailwindcss/postcss":"^4"}}
+{
+  "name": "global-study-support",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "start": "next start",
+    "test": "tsx --test tests/*.test.mjs tests/*.test.tsx",
+    "build:sites": "node scripts/build-sites.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "next": "16.4.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "jsdom": "^27.0.1",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

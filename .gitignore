@@ -3,4 +3,8 @@ node_modules/
 out/
 *.tsbuildinfo
 .env*
+!.env.example
 tmp/
+dist/
+# Owner-provided source documents require a separate privacy/permission review.
+/sample/

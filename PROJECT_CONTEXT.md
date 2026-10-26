@@ -2,6 +2,11 @@
 
 Last updated: 26 October 2026 (Asia/Calcutta).
 
+Current production-improvement work is documented in PRODUCTION_REPORT.md.
+The site now has a server-side enquiry integration; sending stays unavailable
+until delivery/security settings are configured. Preserve the design and the
+single theme button. See the current architecture and enquiry notes below.
+
 Read this file at the start of a new chat about this repository. It explains the
 project's purpose, what has been implemented, the decisions behind it, and what
 still needs attention. Check the current source and Git status before making
@@ -67,8 +72,8 @@ Implemented:
 
 Not implemented or not yet configured:
 
-- Direct server-side enquiry submission to an inbox or CRM.
-- Secure attachment uploads or persistent enquiry storage.
+- Live email delivery credentials and a verified end-to-end delivery check (the server integration is implemented).
+- Live attachment screening credentials (validated/scanned email attachments are implemented but disabled until configured). Persistent enquiry storage is intentionally not added.
 - WhatsApp integration, because a verified number is missing.
 - Admin, blog, database, payments, accounts or analytics.
 - Native CAD, BIM, ETABS or Power BI downloadable project files.
@@ -86,15 +91,18 @@ The application is in `website/` beneath the original workspace directory.
 | Tailwind CSS | Version 4 with `@tailwindcss/postcss` |
 | Styling | Global CSS, semantic theme variables and custom component classes |
 | Icons | `lucide-react` |
-| Fonts | Plus Jakarta Sans for headings; Inter for body text, via Google Fonts |
-| Rendering | Static export, `output: 'export'`, `trailingSlash: true` |
+| Fonts | Plus Jakarta Sans for headings; Inter for body text, locally hosted WOFF2 |
+| Rendering | Native Next server by default; exported Next frontend with shared Worker backend for Sites |
 | Export directory | `out/` |
 | PDF generation | Python 3 and ReportLab |
 | PDF inspection used | PyMuPDF rendering followed by image inspection |
 
-There are no API routes, server actions, database connections or application
-environment variables required by the current implementation. Next image
-optimisation is disabled for compatibility with the static export.
+The dynamic /api/enquiries/ endpoint is implemented in app/api/enquiries/route.ts
+and delegates to server/enquiries.mjs. Native production uses npm run build and
+npm start. Sites uses npm run build:sites to combine the same exported frontend
+with the shared backend in a Worker. No database or server actions are used.
+Delivery/security environment settings are listed in .env.example. Image assets
+are pre-optimised responsive WebP files and served without a runtime optimiser.
 
 The installed Next.js version includes local documentation at
 `node_modules/next/dist/docs/`. Follow the generated Next.js guidance in
@@ -196,8 +204,12 @@ visible focus outlines, labelled inputs, native validation, filter pressed state
 live result/status text, reduced-motion CSS and alternative image descriptions.
 WCAG AA compliance and cross-browser usability have not been formally audited.
 
-The header displays the emblem portion of the supplied square logo with text
-beside it. The full original image remains in `public/logo.png`.
+The header displays an optimised local brandmark.webp derived from the supplied
+logo, with readable text beside it. The full source remains in public/logo.png
+and the original workspace Logo.png. A favicon derived from that emblem exists.
+Inter and Plus Jakarta Sans are now locally hosted variable WOFF2 fonts with
+OFL licences in public/fonts; the browser no longer requests Google Fonts.
+Dark-theme link text uses #8AB4FF for normal-text contrast against dark surfaces.
 
 ## 7. Software directory and service content
 
@@ -254,27 +266,34 @@ on the original authoring machine resolved to an old MGLTools interpreter, so
 `py -3.10` was used. ReportLab generates the files; PyMuPDF was used to render
 them for inspection. The initial PDFs were all one page and visually checked.
 
-## 9. Enquiry behavior - important production limitation
+## 9. Current enquiry implementation
 
-The contact form is a static, browser-side email preparation flow. It does not
-send an enquiry automatically and has no secure upload backend.
+Read server/enquiries.mjs, components/enquiry.tsx, .env.example and README.md.
 
-It collects name, email, category, service, optional software, optional deadline,
-requirements, optional attachment selections and consent. It includes required
-field validation, an email input, requirements length limits and a 10 MB per-file
-selection limit. These are client-side checks, not server security controls.
+- GET /api/enquiries/ returns public availability, site key and attachment flag.
+- POST validates origin, bounded multipart body, fields/enums, deadlines, consent,
+  a honeypot and a server-verified Turnstile token (hostname and action included).
+- Rate limiting is in memory per process/isolate; a shared edge limit is still
+  needed before scaling publicly. Trust forwarded IP headers only at a controlled proxy.
+- Resend is called via fetch with a configured sender/recipient, validated reply-to
+  address, plain-text body and deterministic idempotency key.
+- A provider receipt is required for success. The message states provider acceptance
+  for delivery, not guaranteed arrival. Failures retain the visitor's input.
+- Name, email, category, assistance, software, deadline, description and optional
+  pricing plan are captured. Service/software/plan query prefills are supported.
+- Attachments remain disabled until a scanner URL and API key are configured.
+  One PDF/PNG/JPEG/UTF-8 TXT/CSV, maximum 3 MB, is checked by size/signature/type
+  and must receive a clean response from the HTTPS scanner before forwarding.
+  No public download URL or persistent upload storage is created.
+- Email-app preparation, copy and text-download alternatives remain available.
+- Missing credentials produce an unavailable state. No API key or WhatsApp number
+  was invented and no real delivery has been tested.
 
-Actions:
-
-- Prepare Email Enquiry opens a `mailto:` URL for the configured business inbox.
-- Copy details writes the prepared enquiry to the clipboard where available.
-- Download enquiry saves the prepared text locally.
-- Selected file names are included in the message. The files themselves remain
-  on the visitor's device and must be attached manually in the email application.
-
-Do not describe this as a working automatic submission or secure upload service.
-Do not invent a WhatsApp number. Direct submission requires an agreed backend or
-form provider, configuration/credentials and appropriate handling for uploads.
+Required server settings: ENQUIRY_ALLOWED_ORIGIN, ENQUIRY_TO_EMAIL,
+ENQUIRY_FROM_EMAIL, RESEND_API_KEY, TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY.
+Optional screening: ATTACHMENT_SCAN_URL, ATTACHMENT_SCAN_API_KEY.
+Public build configuration: NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_CONTACT_EMAIL.
+Never put delivery secrets in NEXT_PUBLIC_ variables, tracked files or output.
 
 ## 10. Local development and checks
 
@@ -294,7 +313,11 @@ npm run typecheck
 node scripts/check-export.mjs
 ```
 
-The export checker requires an existing `out/` from a successful build. It checks
+Run npm test for the Node/tsx/jsdom suite. There is no configured lint script.
+Run npm run build:sites for the Sites artifact, then node scripts/check-worker.mjs.
+Do not run native and Sites builds simultaneously because they share .next/.
+
+The export checker requires an existing `out/` from a successful Sites build. It checks
 local `href` and `src` targets; it is not a browser interaction or accessibility
 test. Rebuild after changing public assets so the export contains those changes.
 
@@ -323,7 +346,7 @@ review site. Preserve this identity when updating; do not create a duplicate Sit
 
 - URL: `https://global-study-support.patelprincem2000.chatgpt.site`
 - Project ID: `appgprj_6adeefd92d4c819182845181794da57a`
-- Manifest: `.openai/hosting.json`, static directory `out`.
+- Manifest: `.openai/hosting.json`. The current source removes static configuration because the Sites build now includes the backend Worker. The original deployment was static.
 - Initial pushed source commit: `1e60aa7359b1074ef02f8a9dbfa6479179d0fe0e`.
 - Initial saved version:
   `appgprj_6adeefd92d4c819182845181794da57a~appgver_a1c9e0af03dc8191b28b5b5bfe456677`.
@@ -358,6 +381,28 @@ deployment record rather than assuming the initial commit is still current.
   pages/routes. Exported links/assets passed across 44 HTML files.
 - `git diff --check` passed; Git emitted only line-ending conversion notices.
 
+### Production improvement update - 26 October 2026
+
+- Expanded all four service pages with structured overviews and FAQs and all 20
+  software pages with specific topics. Added Python/React logos with notices.
+- Sample detail pages now show structured objectives, methodology and learning
+  outcomes; PDF/download controls require actual files. No real screenshots were
+  fabricated. The private sample/ folder of Word source documents is ignored and
+  excluded from publication pending owner permission/content/privacy review.
+- Added quote-plan prefills and server-side enquiries as described in section 9.
+- Optimised photos, brand emblem and favicon; self-hosted fonts; added response
+  security headers, active navigation attributes and mobile Escape/focus support.
+- Added DOM interaction and backend tests using test-only tsx/jsdom/@types/jsdom.
+  No runtime dependencies, admin, login, blog or payments were added.
+- 18 tests passed, native and Sites production builds passed, TypeScript passed,
+  44 exported HTML pages passed the asset/link check, Worker smoke checks passed,
+  and native production HTTP smoke checks passed. Production npm audit reported
+  zero vulnerabilities. No lint script exists, so no lint pass is claimed.
+- Browser inventory remained empty: real viewport/console/Core Web Vitals checks
+  are outstanding. DOM tests cover controls and theme hydration, not real layout.
+- See PRODUCTION_REPORT.md for changed file groups, exact checks, limitations and
+  prerequisites. See README.md for native/Sites build and secret setup instructions.
+
 ## 12. Remaining work and useful next steps
 
 1. Review the actual website in desktop and mobile browsers, including navigation,
@@ -365,8 +410,9 @@ deployment record rather than assuming the initial commit is still current.
 2. Review typography sizing, contrast and layouts against the user's premium
    design goals. Formal accessibility verification remains outstanding.
 3. Obtain the verified WhatsApp number if that contact option is required.
-4. Choose and configure a form backend/CRM and secure upload storage if direct
-   submission is required. Update the UI and privacy content to match reality.
+4. Configure the implemented Resend/Turnstile integration and optional scanner;
+   verify real provider acceptance and delivery. Add shared edge abuse limits
+   before scaling publicly. UI/privacy now describe the actual integration.
 5. Confirm supported tools, service availability and business policy details with
    the owner before public launch.
 6. Add authorised original portfolio work and native project files if available;
@@ -393,3 +439,7 @@ contradictory historical claims. Record:
 Keep README concise and this file comprehensive. Keep AGENTS.md's pointer to
 this file outside the generated Next.js rules block. Never treat a to-do item
 as completed merely because it is described here.
+
+New files to know: lib/details.ts, lib/config.ts, lib/search.ts, lib/sample-files.ts,
+components/photo.tsx, components/software-mark.tsx, server/, tests/,
+scripts/build-sites.mjs, scripts/check-worker.mjs, PRODUCTION_REPORT.md and .env.example.
