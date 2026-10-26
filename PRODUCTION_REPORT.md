@@ -160,3 +160,12 @@ app/globals.css and the handoff documentation.
 The preview update Sites build passed (466 hosted assets, 9412 KB gzip Worker).
 Worker checks passed for 25 pages/assets and rejected direct source Word/PDF URLs.
 The final source-packaging workflow also validates the native build and tests.
+
+Preview update publication completed on 26 October 2026:
+- Native production build, Sites build, all 19 tests, TypeScript, 51-page export checks and 25-route/asset Worker checks passed.
+- Deployment status: succeeded; existing owner-private audience preserved.
+- URL: https://global-study-support.patelprincem2000.chatgpt.site
+- Source commit: 794b2d0302889f9680ce5ff5ddcc7ddd27d2c4f6
+- Saved version: appgprj_6adeefd92d4c819182845181794da57a~appgver_e58ae5096f048191865ffb3e3cb99b72
+- Deployment: appgdep_6adf132c67f48191b805a1fafe14f2ba
+- This deployment record was appended locally after publication. No live browser interaction test or real email delivery was performed.

@@ -511,3 +511,14 @@ were never published. The converted raw PDFs in ignored tmp/word-pdf/ allow
 regeneration without the Word files. The temporary converter/installer cleanup
 was rejected by automatic approval review (generic blocked-by-policy reason),
 so ignored tmp/tools/ remains local and is excluded from source/publication.
+
+Preview update publication completed on 26 October 2026:
+- Native production build, Sites build, all 19 tests, TypeScript, 51-page export checks and 25-route/asset Worker checks passed.
+- Deployment status: succeeded; existing owner-private audience preserved.
+- URL: https://global-study-support.patelprincem2000.chatgpt.site
+- Source commit: 794b2d0302889f9680ce5ff5ddcc7ddd27d2c4f6
+- Saved version: appgprj_6adeefd92d4c819182845181794da57a~appgver_e58ae5096f048191865ffb3e3cb99b72
+- Deployment: appgdep_6adf132c67f48191b805a1fafe14f2ba
+- This deployment record was appended locally after publication. No live browser interaction test or real email delivery was performed.
+
+26 October 2026 label refinement: removed the word Watermarked from sample headings, loading text, captions, descriptions, deliverable labels and accessible image labels at the owner's request. Document watermark images, PDF restrictions and preview-only behavior remain unchanged.
