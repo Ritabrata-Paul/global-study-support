@@ -7,3 +7,15 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Project context for future chats
+
+Before working on this project, read `PROJECT_CONTEXT.md` in this directory. It
+records the user requirements, architecture, implemented features, content,
+deployment history, validation results, limitations, and remaining work.
+
+Treat that file as a handoff snapshot, not proof that the current code or live
+deployment is unchanged. Check the relevant source and Git status before editing.
+Update `PROJECT_CONTEXT.md` after meaningful changes, recording what changed,
+what was verified, and any remaining limitations. Never record credentials,
+access tokens, private enquiry contents, or other secrets in documentation.

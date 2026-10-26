@@ -2,12 +2,32 @@
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {useEffect,useState} from 'react';
-import {ArrowUpRight,ArrowRight,Menu,X,Sun,Moon,Monitor,Globe2,Check,Code2,Cog,Building2,ChartNoAxesCombined,ChevronDown} from 'lucide-react';
+import {ArrowUpRight,ArrowRight,Menu,X,Globe2,Check,Code2,Cog,Building2,ChartNoAxesCombined,ChevronDown} from 'lucide-react';
 import {services,samples} from '@/lib/data';
+import ThemeToggle from './theme-toggle';
 export const Arrow=ArrowUpRight;
 const nav=[['Home','/'],['About','/about/'],['Services','/services/'],['All Software','/software/'],['Samples','/samples/'],['How It Works','/how-it-works/'],['Pricing','/pricing/']];
 export function Brand(){return <Link href="/" className="brand" aria-label="Global Study Support home"><span className="brand-logo"><img src="/logo.png" alt=""/></span><span>Global Study<span className="brand-sub">SUPPORT</span></span></Link>}
-export function Header(){const path=usePathname();const[open,setOpen]=useState(false);const[theme,setTheme]=useState('light');const[themes,setThemes]=useState(false);useEffect(()=>{setTheme(localStorage.getItem('gss-theme')||'light')},[]);useEffect(()=>{const m=matchMedia('(prefers-color-scheme: dark)');const update=()=>{document.documentElement.dataset.theme=theme==='system'?(m.matches?'dark':'light'):theme};update();m.addEventListener('change',update);return()=>m.removeEventListener('change',update)},[theme]);useEffect(()=>{setOpen(false);setThemes(false)},[path]);return <header className="site-header"><div className="nav-wrap"><Brand/><nav className={open?'main-nav is-open':'main-nav'} aria-label="Main navigation">{nav.map(([label,href])=><Link key={href} href={href} className={path===href||href!=='/'&&path.startsWith(href)?'active':''}>{label}</Link>)}<Link href="/contact/" className="mobile-contact">Contact</Link></nav><div className="nav-actions"><div className="theme-control"><button className="icon-btn" aria-label="Choose colour theme" aria-expanded={themes} onClick={()=>setThemes(!themes)}>{theme==='dark'?<Moon size={18}/>:theme==='system'?<Monitor size={18}/>:<Sun size={18}/>}</button>{themes&&<><button className="popover-dismiss" aria-label="Close theme menu" onClick={()=>setThemes(false)}/><div className="theme-menu">{[['light',Sun],['dark',Moon],['system',Monitor]].map(([value,Icon])=>{const T=Icon as typeof Sun;return <button key={String(value)} onClick={()=>{setTheme(String(value));localStorage.setItem('gss-theme',String(value));setThemes(false)}}><T size={16}/>{String(value)}{theme===value&&<Check size={15}/>}</button>})}</div></>}</div><Link className="button small nav-contact" href="/contact/">Let’s Talk <ArrowUpRight size={15}/></Link><button className="icon-btn menu-toggle" aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></div></div></header>}
+export function Header() {
+  const path = usePathname();
+  const [open, setOpen] = useState(false);
+  useEffect(() => { setOpen(false); }, [path]);
+
+  return <header className="site-header">
+    <div className="nav-wrap">
+      <Brand />
+      <nav className={open ? 'main-nav is-open' : 'main-nav'} aria-label="Main navigation">
+        {nav.map(([label, href]) => <Link key={href} href={href} className={path === href || href !== '/' && path.startsWith(href) ? 'active' : ''}>{label}</Link>)}
+        <Link href="/contact/" className="mobile-contact">Contact</Link>
+      </nav>
+      <div className="nav-actions">
+        <ThemeToggle />
+        <Link className="button small nav-contact" href="/contact/">Let?s Talk <ArrowUpRight size={15}/></Link>
+        <button className="icon-btn menu-toggle" aria-label={open ? 'Close navigation' : 'Open navigation'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button>
+      </div>
+    </div>
+  </header>;
+}
 export function Footer(){return <footer><div className="container footer-grid"><div><Brand/><p>Clear guidance. Practical solutions.<br/>A world of possibilities.</p><div className="global-note"><Globe2 size={15}/> Supporting ambition, worldwide.</div></div><div><h4>Explore</h4><Link href="/about/">About us</Link><Link href="/services/">Our services</Link><Link href="/software/">Software directory</Link><Link href="/samples/">Work samples</Link></div><div><h4>Get started</h4><Link href="/how-it-works/">How it works</Link><Link href="/pricing/">Pricing & plans</Link><Link href="/faq/">Frequently asked questions</Link><Link href="/contact/">Contact us</Link></div><div className="footer-last"><h4>Learn with integrity.</h4><p>Support that builds your understanding and respects academic and professional standards.</p><Link className="text-link" href="/academic-integrity/">Our commitment <ArrowUpRight size={14}/></Link></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} Global Study Support</span><div><Link href="/privacy/">Privacy</Link><Link href="/terms/">Terms of service</Link><Link href="/image-credits/">Image credits</Link></div></div></footer>}
 export function Icon({name,size=22}:{name:string,size?:number}){const I=name==='code'?Code2:name==='cog'?Cog:name==='building'?Building2:ChartNoAxesCombined;return <I size={size}/>}
 export function ServiceCards(){return <div className="service-grid">{services.map((s,i)=><Link key={s.slug} href={'/services/'+s.slug+'/'} className="service-card"><div className="service-image"><img src={'/images/'+s.image+'.jpg'} alt={s.title+' workspace'} loading="lazy"/><span className="image-number">0{i+1}</span></div><div className="service-body"><span className={'service-icon tone-'+i}><Icon name={s.icon}/></span><h3>{s.short}</h3><p>{s.tags.join(', ')}</p><span className="card-link">Explore expertise <ArrowUpRight size={17}/></span></div></Link>)}</div>}
