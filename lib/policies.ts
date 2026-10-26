@@ -4,7 +4,7 @@ export type PolicySection={id:string;title:string;paragraphs:string[];bullets?:s
 export type PolicyDocument={updated:string;summary:string;sections:PolicySection[]};
 export const privacyPolicy:PolicyDocument={
  updated:'26 October 2026',
- summary:'This policy explains how Global Study Support handles information collected through this website, enquiries and related communications. It distinguishes the website’s current features from services that are available only when configured.',
+ summary:'This policy explains what information Global Study Support handles, why it is used, how it is shared and the choices available to you when visiting our website or contacting us.',
  sections:[
   {id:'privacy-scope',title:'1. Who this policy covers',paragraphs:[
    'Global Study Support is the service name used on this website. This policy applies when you browse the site, contact us, request a quotation or share material for an agreed academic or professional support enquiry. Contact us using the business email below with questions about your information.',
@@ -120,7 +120,7 @@ export const termsOfService:PolicyDocument={
   ]},
   {id:'terms-complaints',title:'12. Questions, complaints and disputes',paragraphs:[
    'Contact the business email below with the relevant quotation or enquiry reference, a description of the issue and the outcome you are seeking. We will review the concern and discuss an appropriate resolution. Please avoid including unnecessary private information.',
-   'An engagement agreement should identify the applicable law and any agreed dispute procedure. This website does not select an unconfirmed country’s law or require you to waive access to courts, regulators or remedies available under mandatory local protections. If a term cannot be enforced, the remaining terms continue only to the extent they can fairly operate without it.'
+   'An engagement agreement should identify the applicable law and any agreed dispute procedure. Nothing in these terms requires you to waive access to courts, regulators or remedies available under mandatory local protections. If a term cannot be enforced, the remaining terms continue only to the extent they can fairly operate without it.'
   ]},
   {id:'terms-updates',title:'13. Changes to these terms',paragraphs:[
    'The revision date above identifies the latest website terms. Updates apply prospectively to website use after publication. A change to these pages does not automatically rewrite an existing engagement agreement; material changes to agreed work must follow that agreement and applicable law. Contact Global Study Support before proceeding if any term or proposed scope is unclear.'
