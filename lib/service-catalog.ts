@@ -2,7 +2,7 @@
 // for future candidates until expertise is confirmed; routes/forms exclude them.
 export type ServiceCategory = {
  slug:string; title:string; short:string; subtitle:string; description:string;
- image:string; icon:string; tags:string[]; topics:string[]; tools:string[]; published:boolean;
+ image:string; imageAlt?:string; icon:string; tags:string[]; topics:string[]; tools:string[]; published:boolean;
 };
 export type Offering = {
  slug:string; title:string; category:string; description:string; topics:string[];

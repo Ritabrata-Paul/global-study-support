@@ -1,0 +1,44 @@
+{
+  "mechanical-engineering": {
+    "image": "mechanical-support",
+    "alt": "Industrial engineer operating a CNC machine in a manufacturing workshop",
+    "id": "32845661",
+    "photographer": "Sergey Sergeev",
+    "source": "https://www.pexels.com/photo/industrial-engineer-operating-cnc-machine-in-factory-32845661/"
+  },
+  "finance-accounting": {
+    "image": "finance-support",
+    "alt": "Accountant reviewing financial documents with a calculator at a desk",
+    "id": "8296970",
+    "photographer": "Mikhail Nilov",
+    "source": "https://www.pexels.com/photo/a-person-examining-documents-8296970/"
+  },
+  "management-business": {
+    "image": "management-support",
+    "alt": "Business team discussing plans together around a meeting table",
+    "id": "6146820",
+    "photographer": "Diva Plavalaguna",
+    "source": "https://www.pexels.com/photo/a-group-of-people-having-a-business-meeting-6146820/"
+  },
+  "statistics-data-analytics": {
+    "image": "analytics-support",
+    "alt": "Printed statistical charts and graphs being reviewed beside a laptop",
+    "id": "669612",
+    "photographer": "Lukas Blazek",
+    "source": "https://www.pexels.com/photo/person-holding-chart-and-bar-graph-669612/"
+  },
+  "academic-writing-research": {
+    "image": "writing-support",
+    "alt": "Researcher writing notes in a notebook while working with a laptop",
+    "id": "6986454",
+    "photographer": "cottonbro studio",
+    "source": "https://www.pexels.com/photo/woman-writing-in-notebook-and-with-laptop-on-table-6986454/"
+  },
+  "professional-projects-documentation": {
+    "image": "documentation-support",
+    "alt": "Two colleagues reviewing project documents together in an office",
+    "id": "7651557",
+    "photographer": "Kindel Media",
+    "source": "https://www.pexels.com/photo/a-man-and-woman-holding-documents-7651557/"
+  }
+}

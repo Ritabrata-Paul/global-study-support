@@ -612,3 +612,30 @@ with only fallback entries points to More; changing results resets it closed.
 Logo availability comes from hasSoftwareLogo in components/software-mark.tsx,
 so adding an actual logo automatically promotes the entry into the main grid.
 Sample cards, filters, detail pages and previews were not changed.
+Software More update validation: all 25 tests passed, including collapsed/default groups, open/close and a search matching only an entry inside More. Production build/TypeScript passed, links checked across 159 HTML files, all 1040 Worker assets verified losslessly. Published with owner-private audience preserved: commit f9c6410aea054b89215305f9b3dffdb59981c472; deployment appgdep_6adf2c2445c8819180cd6dc8e53bd3fa succeeded. This deployment note was appended locally after publication.
+
+
+26 October 2026 - Relevant service photography: the eight service cards now use
+unique subject-specific images. Kept IT coding and civil architecture; six new
+Pexels photos show CNC manufacturing, financial paperwork/calculator, business
+planning, statistical charts, writing/research notes and project document review.
+lib/service-photos.json records source URLs, photographers, image names and alt
+text. lib/data.ts maps these only to service categories. Service cards and category
+detail pages reuse the same relevant imagery. Photo supports correct intrinsic
+sizes and responsive WebP variants. Image credits list all new sources. Original
+photos remain in place for existing portfolio illustrations; sample data and
+preview assets were not changed. No AI-generated images were used.
+
+
+26 October 2026 - Professional policy expansion: lib/policies.ts stores structured
+Privacy Policy and Terms of Service copy, rendered by components/policy-document.tsx
+on existing /privacy/ and /terms/ routes. Includes revision date, section links,
+readable data-category table, enquiry/attachment/provider handling, retention
+criteria, localStorage, conditional privacy rights, security and contact details;
+terms cover scope, academic integrity, authorised security use, quotations,
+revisions, cancellation and mandatory rights, IP, professional limits and disputes.
+Provider links and regulator guidance were checked; no compliance certification,
+fixed refund rule, invented legal entity, country, jurisdiction or retention period
+was asserted. The owner was asked for business identity/country and retention
+schedule; those details and jurisdiction-specific review remain outstanding until
+confirmed. Existing business email, policy/footer links and form are preserved.
