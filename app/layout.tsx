@@ -1,0 +1,6 @@
+import type { Metadata } from 'next';
+import { Header, Footer } from '@/components/site';
+import './globals.css';
+export const metadata: Metadata = {metadataBase:new URL('https://global-study-support.patelprincem2000.chatgpt.site'),title:{default:'Global Study Support | Your Growth. Our Expertise.',template:'%s | Global Study Support'},description:'Practical academic and professional guidance in IT, mechanical engineering, civil engineering, finance and data analytics.'};
+const themeScript = `(function(){try{var t=localStorage.getItem('gss-theme')||'light';document.documentElement.dataset.theme=t==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t}catch(e){}})()`;
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:themeScript}}/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/></head><body><a className="skip-link" href="#main">Skip to content</a><Header/><main id="main">{children}</main><Footer/></body></html>}
