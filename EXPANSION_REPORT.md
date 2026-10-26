@@ -118,3 +118,21 @@ Center, Chicago Manual citation guide, IEEE Reference Guide, NLM Citing Medicine
 Oxford OSCOLA, AMA Manual, ACS Guide and Leeds Harvard guidance. Exact links are
 stored with each style in `lib/academic.ts`. Official product/project links are
 stored per tool in `lib/software-catalog.ts`.
+
+## Final publication result
+
+Published successfully on 26 October 2026, preserving owner-private access.
+URL: https://global-study-support.patelprincem2000.chatgpt.site
+Source commit: 7e908e9bc4709c0d564e41abcb799fce840d45af
+Saved version: appgprj_6adeefd92d4c819182845181794da57a~appgver_3c446888fe008191816a2915fed51274
+Deployment: appgdep_6adf2964d9508191bac29598d6b53461
+
+Final validation: npm test passed all 25 tests; npm run build passed; npm run
+typecheck passed independently. The final Sites package passed its production
+build, TypeScript, 159-file link check, 156-page SEO check and lossless comparison
+of every one of 1,040 assets. Final gzip Worker size was 9,305 KB. A transient
+Windows process-cleanup EPERM during the first packaging attempt was resolved
+by retrying; no code workaround or permission change was required. No lint script
+is configured. Browser/device QA and real email delivery remain unverified.
+
+This publication record was appended locally after the deployed source snapshot.

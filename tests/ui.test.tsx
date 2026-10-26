@@ -17,6 +17,7 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  const {PathnameContext,SearchParamsContext}=await import('next/dist/shared/lib/hooks-client-context.shared-runtime.js');
  const {default:ThemeToggle}=await import('../components/theme-toggle');
  const {software}=await import('../lib/data');
+ const {hasSoftwareLogo}=await import('../components/software-mark');
  const {default:ServiceDirectory}=await import('../components/service-directory');
  const {default:Directory}=await import('../components/directory');
  const {Header}=await import('../components/site');
@@ -46,6 +47,14 @@ test('directory, mobile navigation, persisted theme, hydration and enquiry state
  await act(async()=>document.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true})));assert.equal(menu.getAttribute('aria-expanded'),'false');assert.equal(document.activeElement,menu);
 
  await render(<Directory kind="software"/>);assert.equal(container.querySelectorAll('.tool-card').length,software.length);
+ const moreTools=container.querySelector<HTMLDetailsElement>('details.more-software')!;assert.ok(moreTools);assert.equal(moreTools.open,false);
+ assert.equal(container.querySelectorAll('.more-software .tool-card').length,software.filter(s=>!hasSoftwareLogo(s.slug)).length);
+ assert.equal(container.querySelector('.directory-grid')!.querySelectorAll('.tool-card').length,software.filter(s=>hasSoftwareLogo(s.slug)).length);
+ for(const card of container.querySelector('.directory-grid')!.querySelectorAll('.tool-card'))assert.ok(card.querySelector('img'));
+ await click(moreTools.querySelector('summary')!);assert.equal(moreTools.open,true);
+ await click(moreTools.querySelector('summary')!);assert.equal(moreTools.open,false);
+ await setValue(container.querySelector('input[type="search"]')!,'EndNote');assert.equal(container.querySelectorAll('.tool-card').length,1);assert.equal(container.querySelector<HTMLDetailsElement>('details.more-software')!.open,false);assert.ok(container.querySelector('.more-software-hint'));assert.match(container.querySelector('.more-software')!.textContent!,/EndNote/);
+
  await setValue(container.querySelector('input[type="search"]')!,'pYtHoN');assert.equal(container.querySelectorAll('.tool-card').length,1);assert.match(container.querySelector('.tool-card')!.textContent!,/Python/);
  await click(button('Civil Engineering'));assert.ok(container.querySelector('.empty-state'));
  await click(button('Clear filters'));assert.equal(container.querySelectorAll('.tool-card').length,software.length);
